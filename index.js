@@ -116,12 +116,31 @@ function updateFile() {
 
 // Function for folder
 
-function createFolder() {}
+function createFolder() {
+  fs.mkdir("test2024", (err) => {
+    if (err) throw err;
+    console.log("Directory 'test2024' was created!");
+  });
+}
+
+function removeFolder() {
+  fs.rmdir("test2024", (err) => {
+    if (err) throw err;
+    console.log("Directory 'test2024' was remove!");
+  });
+}
+
+function showFolder() {
+  fs.readdir("test2024", (err, files) => {
+    if (err) throw err;
+    console.log(files);
+  });
+}
 
 switch (choice) {
   case "1":
     const choice1 = prompt(
-      " Menu : \n 1-File Handling Menu : \n  1-create file \n  2-rename file \n  3-read file \n  4-delete file \n  5-update content \n  "
+      " Menu : \n 1-File Handling Menu : \n  1-create file \n  2-rename file \n  3-read file \n  4-delete file \n  5-update content \n..."
     );
     switch (choice1) {
       case "1":
@@ -150,7 +169,7 @@ switch (choice) {
 
   case "2":
     const choice2 = prompt(
-      " Menu :  2-Folder Handling : \n  1-create folder\n  2-remove folder \n  3-show folder content  "
+      " Menu :  2-Folder Handling : \n  1-create folder\n  2-remove folder \n  3-show folder content \n..."
     );
     switch (choice2) {
       case "1":
