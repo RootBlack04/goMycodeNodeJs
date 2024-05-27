@@ -211,3 +211,14 @@ switch (choice) {
     console.log("Not OK 😤🤦‍♂️");
     break;
 }
+
+// ----------------------- 5/27/2024 -------------------------------------
+
+const dotenv = require("dotenv");
+const { log } = require("console");
+
+dotenv.config();
+
+const age = process.env.AGE;
+
+console.log(age);
