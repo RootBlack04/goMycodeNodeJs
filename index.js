@@ -82,56 +82,56 @@ const choice = prompt(
 );
 
 // function for File
-function createFile() {
-  fs.writeFile("file.txt", "Hello, World!", (err) => {
+function createFile(nameFile, content) {
+  fs.writeFile(nameFile, content, (err) => {
     if (err) throw err;
     console.log("File has been created!");
   });
 }
 
-function renameFile() {
-  fs.rename("oldFile.txt", "newFile.txt", (err) => {
+function renameFile(oldFile, newFile) {
+  fs.rename(oldFile, newFile, (err) => {
     if (err) throw err;
     console.log("File has been renamed!");
   });
 }
-function readFile() {
-  fs.readFile("file.txt", "utf8", (err, data) => {
+function readFile(file) {
+  fs.readFile(file, "utf8", (err, data) => {
     if (err) throw err;
     console.log(data);
   });
 }
-function deleteFile() {
-  fs.unlink("file.txt", (err) => {
+function deleteFile(file) {
+  fs.unlink(file, (err) => {
     if (err) throw err;
     console.log("file.txt was deleted");
   });
 }
-function updateFile() {
-  fs.appendFile("file.txt", " More data", (err) => {
+function updateFile(file, newData) {
+  fs.appendFile(file, newData, (err) => {
     if (err) throw err;
-    console.log('The "More data" was appended to file!');
+    console.log(`The "More data" was appended to ${file}!`);
   });
 }
 
 // Function for folder
 
-function createFolder() {
-  fs.mkdir("test2024", (err) => {
+function createFolder(folderName) {
+  fs.mkdir(folderName, (err) => {
     if (err) throw err;
     console.log("Directory 'test2024' was created!");
   });
 }
 
-function removeFolder() {
-  fs.rmdir("test2024", (err) => {
+function removeFolder(folderName) {
+  fs.rmdir(folderName, (err) => {
     if (err) throw err;
     console.log("Directory 'test2024' was remove!");
   });
 }
 
-function showFolder() {
-  fs.readdir("test2024", (err, files) => {
+function showFolder(folderName) {
+  fs.readdir(folderName, (err, files) => {
     if (err) throw err;
     console.log(files);
   });
@@ -145,23 +145,35 @@ switch (choice) {
     switch (choice1) {
       case "1":
         console.log("1-create file");
+        const nameFile = prompt("Name of file : ... ");
+        const content = prompt("Add content of file : ... ");
+        createFile(nameFile, content);
         break;
       case "2":
         console.log("2-rename file");
+        const nameFile1 = prompt("Name of file : ... ");
+        const newFile = prompt("New Name of file ? : ... ");
+        renameFile(nameFile1, newFile);
         break;
       case "3":
         console.log("3-read file");
+        const nameFile2 = prompt("Name of file : ... ");
+        readFile(nameFile2);
         break;
       case "4":
         console.log("4-delete file");
+        const nameFile3 = prompt("Name of file : ...");
+        deleteFile(nameFile3);
         break;
       case "5":
         console.log("5-update content");
+        const nameFile4 = prompt("Name of file : ... ");
+        const content1 = prompt("Add New content of file : ... ");
+        updateFile(nameFile4, content1);
         break;
 
       default:
         console.log("Not OK 😤🤦‍♂️");
-
         break;
     }
 
@@ -174,12 +186,18 @@ switch (choice) {
     switch (choice2) {
       case "1":
         console.log("1-create folder");
+        const nameFolder = prompt("Name of Folder : ... ");
+        createFolder(nameFolder);
         break;
       case "2":
         console.log("2-remove folder");
+        const nameFolder1 = prompt("Name of Folder : ... ");
+        removeFolder(nameFolder1);
         break;
       case "3":
         console.log("3-show folder content");
+        const nameFolder2 = prompt("Name of Folder : ... ");
+        showFolder(nameFolder2);
         break;
 
       default:
