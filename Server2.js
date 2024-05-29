@@ -6,8 +6,43 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const port = process.env.PORT;
+const keyValue = process.env.API_KEY;
 
 const app = express();
+
+// Middleware
+
+const checkLink = (req, res, next) => {
+  const apikey = req.query.apikey;
+  if (apikey) {
+    next();
+  } else {
+    res.status(403).json({ message: "Apikey Not Found" });
+  }
+};
+app.use("/api/users", checkLink);
+
+
+//------------------------------------------------------------------------------------------------
+const apiSecured = (req, res, next) => {
+  const apikey = req.query.apikey;
+  
+
+  if (!apikey) {
+    res.status(401).json({ message: "apikey Query not Found" });
+  } else if (apikey !== keyValue) {
+    res.status(401).json({ message: "Incorrect Api key value" });
+  }else{
+    next()
+  }
+};
+
+
+app.use("/api",apiSecured)
+
+
+
+
 
 // get request /
 
