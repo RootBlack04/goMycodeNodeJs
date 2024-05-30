@@ -1,6 +1,8 @@
 // import Express & dotenv
+const fs = require("fs");
 
 const express = require("express");
+const bodyParser = require("body-parser");
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -9,6 +11,8 @@ const port = process.env.PORT;
 const keyValue = process.env.API_KEY;
 
 const app = express();
+
+app.use(bodyParser.json());
 
 // Middleware
 
@@ -22,27 +26,20 @@ const checkLink = (req, res, next) => {
 };
 app.use("/api/users", checkLink);
 
-
 //------------------------------------------------------------------------------------------------
 const apiSecured = (req, res, next) => {
   const apikey = req.query.apikey;
-  
 
   if (!apikey) {
     res.status(401).json({ message: "apikey Query not Found" });
   } else if (apikey !== keyValue) {
     res.status(401).json({ message: "Incorrect Api key value" });
-  }else{
-    next()
+  } else {
+    next();
   }
 };
 
-
-app.use("/api",apiSecured)
-
-
-
-
+app.use("/api", apiSecured);
 
 // get request /
 
@@ -134,6 +131,69 @@ app.get("/api/users/:id", (req, res) => {
   }
 });
 
+app.post("/api/users/postuser", (req, res) => {
+  const { username, email } = req.body;
+  let content = `hello \n username : ${username} \n E-mail : ${email}`
+  createFile(username,content)
+
+  res.status(200).json({ mes: "File has been created!" });
+});
+
+
+
+
+/*  
+
+---- fetch test --
+fetch("http://127.0.0.1:7500/api/users/postuser?apikey=test123", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ username: "Abdallah", email: "abdallah@gmail.com" }),
+})
+  .then((res) => res.json())
+  .then((data) => console.log(data));
+
+*/
+
+// fetch post
+
+
+
+// function for File
+function createFile(nameFile, content) {
+  fs.writeFile(nameFile+".txt", content, (err) => {
+    if (err) throw err;
+    console.log("File has been created!");
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app.listen(port, () => {
   console.log(`yout app is running on http:127.0.0.1:${port}`);
 });
+
+
+
