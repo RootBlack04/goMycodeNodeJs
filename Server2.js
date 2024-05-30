@@ -100,7 +100,7 @@ app.get("/api/users", (req, res) => {
   ];
   res.status(200).json(users);
 });
-
+/* 
 app.get("/api/users/:id", (req, res) => {
   let users = [
     {
@@ -120,27 +120,29 @@ app.get("/api/users/:id", (req, res) => {
       username: "Najib",
     },
   ];
-
+  
   let apiId = req.params.id;
   const idFind = users.find((el) => el.id === +apiId);
-
+  
   if (!idFind) {
     res.status(404).json({ message: "DATA NOT FOUND" });
   } else {
     res.status(200).json(idFind);
   }
 });
+*/
+
+app.get("/api/users/postuser", (req, res) => {
+  res.status(200).json({ message: "we are waiting for you POST" });
+});
 
 app.post("/api/users/postuser", (req, res) => {
   const { username, email } = req.body;
-  let content = `hello \n username : ${username} \n E-mail : ${email}`
-  createFile(username,content)
+  let content = `hello \n username : ${username} \n E-mail : ${email}`;
+  createFile(username, content);
 
   res.status(200).json({ mes: "File has been created!" });
 });
-
-
-
 
 /*  
 
@@ -157,43 +159,14 @@ fetch("http://127.0.0.1:7500/api/users/postuser?apikey=test123", {
 
 // fetch post
 
-
-
 // function for File
 function createFile(nameFile, content) {
-  fs.writeFile(nameFile+".txt", content, (err) => {
+  fs.writeFile(nameFile + ".txt", content, (err) => {
     if (err) throw err;
-    console.log("File has been created!");
+    console.log("File has been created!(Fs)");
   });
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(port, () => {
   console.log(`yout app is running on http:127.0.0.1:${port}`);
 });
-
-
-
