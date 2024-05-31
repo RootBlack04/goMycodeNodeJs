@@ -1,6 +1,7 @@
 // import Express & dotenv
 const fs = require("fs");
 
+
 const express = require("express");
 const bodyParser = require("body-parser");
 
@@ -11,6 +12,7 @@ const port = process.env.PORT;
 const keyValue = process.env.API_KEY;
 
 const app = express();
+app.set("view engine", "ejs");
 
 app.use(bodyParser.json());
 
@@ -166,6 +168,23 @@ function createFile(nameFile, content) {
     console.log("File has been created!(Fs)");
   });
 }
+
+
+
+
+// use view engine 
+
+app.get("/myapp1/home" , (req,res)=> {
+  res.render('home')
+})
+app.get("/myapp1/contact" , (req,res)=> {
+  res.render('contact')
+})
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`yout app is running on http:127.0.0.1:${port}`);
