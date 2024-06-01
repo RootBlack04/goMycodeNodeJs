@@ -1,11 +1,12 @@
 // import Express & dotenv
 const fs = require("fs");
-
+const nodemailer = require("nodemailer");
 
 const express = require("express");
 const bodyParser = require("body-parser");
 
 const dotenv = require("dotenv");
+const { error } = require("console");
 dotenv.config();
 
 const port = process.env.PORT;
@@ -15,6 +16,18 @@ const app = express();
 app.set("view engine", "ejs");
 
 app.use(bodyParser.json());
+
+// ============ NodeMail =============================
+
+const userMail = process.env.MAIL;
+
+const Transport = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: userMail,
+    pass: process.env.MAIL_PASS,
+  },
+});
 
 // Middleware
 
@@ -169,23 +182,72 @@ function createFile(nameFile, content) {
   });
 }
 
+// use view engine
 
+app.get("/myapp1/home", (req, res) => {
+  res.render("home");
+});
+app.get("/myapp1/contact", (req, res) => {
+  res.render("contact");
+});
+//========== NodeMail ================
+// ======== Via Text =============
+/* 
+app.get("/mailtest", (req, res) => {
+  Transport.sendMail({
+    sender: userMail,
+    bcc: process.env.EMAILTO,
+    subject: "Test E-amil send",
+    text: "test test test test test",
+  })
+  .then((data) => res.status(200).json({ msg: "email sent" }))
+  .catch((error) => res.status(500).json({ msg: "not work" }));
+});
+*/
+// ======== Via html file =============
+app.get("/testmailfs", (req, res) => {
+  fs.readFile("emailtampalte.html", "utf8", (err, data) => {
+    if (!err) {
+      Transport.sendMail({
+        from: userMail,
+        bcc: process.env.EMAILTO,
+        subject: "Test Email Send FS",
+        html: data,
+      })
+        .then(() => res.status(200).json({ msg: "email sent" }))
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ msg: "not work" });
+        });
+    } else {
+      console.error(err);
+      res.status(500).json({ msg: "Fs error" });
+    }
+  });
+});
 
-
-// use view engine 
-
-app.get("/myapp1/home" , (req,res)=> {
-  res.render('home')
-})
-app.get("/myapp1/contact" , (req,res)=> {
-  res.render('contact')
-})
-
-
+//=======================================
+//=======================================
+import connection from "./Model/connection";
+//=======================================
+app.get("/product", (req, res) => {
+  connection.query(
+    "INSERT INTO products(lIbelle, price, description, stock, couleur) VALUES(?,?,?,?,?)",
+    ["test001", 125.05, "tetttt", 10, "black"],
+    (err, rows) => {
+      if (err) {
+        res.status(500).json({ msg: "error" });
+      } else {
+        res.status(200).json({ msg: "insert Product" });
+      }
+    }
+  );
+});
 
 
 
 
 app.listen(port, () => {
-  console.log(`yout app is running on http:127.0.0.1:${port}`);
+  //console.log(userMail, process.env.EMAILTO);
+  console.log(`you app is running on http:127.0.0.1:${port}`);
 });
