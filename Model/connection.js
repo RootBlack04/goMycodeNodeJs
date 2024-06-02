@@ -8,4 +8,6 @@ const connection = mysql.createConnection({
   database: "gomycode",
 });
 
-export default connection;
+// export default connection;
+module.exports = connection;
+

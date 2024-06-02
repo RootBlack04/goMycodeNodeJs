@@ -6,7 +6,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 const dotenv = require("dotenv");
-const { error } = require("console");
+
 dotenv.config();
 
 const port = process.env.PORT;
@@ -228,8 +228,10 @@ app.get("/testmailfs", (req, res) => {
 
 //=======================================
 //=======================================
-import connection from "./Model/connection";
+// import connection from ".connection/Model/connection.js";
+const connection = require("./Model/connection");
 //=======================================
+connection.connect();
 app.get("/product", (req, res) => {
   connection.query(
     "INSERT INTO products(lIbelle, price, description, stock, couleur) VALUES(?,?,?,?,?)",
@@ -244,8 +246,73 @@ app.get("/product", (req, res) => {
   );
 });
 
+// app.get("/prouctdelet",(req,res)=> {
+//   connection.connect();
+//   connection.query("")
+// })
 
+//===================RestAPI ==================================
 
+const connectionbackend = require("./Model/connetionbackend");
+connectionbackend.connect();
+
+// get
+app.get("/backendu-users", (req, res) => {
+  const query = "select * from  user";
+  connectionbackend.query(query, (err, rows) => {
+    if (!err) {
+      res.status(200).json(rows);
+    } else {
+      res.status(500).json({ message: "Error" });
+    }
+  });
+});
+// get + params
+app.get("/backendu-users/:id", (req, res) => {
+  const id = req.params.id;
+  const query = "select * from  user where id=?";
+  connectionbackend.query(query, [id], (err, row) => {
+    if (!err) {
+      res.status(200).json(row);
+    } else {
+      res.status(500).json({ message: "Error" });
+    }
+  });
+});
+
+// ==================================================
+app.use(express.json()); // for parsing application/json
+//=============================================================
+
+// Post
+app.post("/backendu-users/create-user", (req, res) => {
+  const { username, email, password, ville } = req.body;
+  const query =
+    "insert into user(username,email,password,ville) values(?,?,?,?)";
+  connectionbackend.query(
+    query,
+    [username, email, password, ville],
+    (err, result) => {
+      if (!err) {
+        res.status(201).json({ msg: "User Created" });
+      } else {
+        console.log(err); // Log the error
+        res.status(500).json({ message: "Error", error: err });
+      }
+    }
+  );
+});
+
+// fetch("http://127.0.0.1:7500/backendu-users/create-user", {
+//   method: "POST",
+//   headers: { "Content-Type": "application/json" },
+//   body: JSON.stringify({
+//     username: "Abdo",
+//     email: "abdo@me.com",
+//     password: "asdsa5343",
+//     ville: "Marrrakech",
+//   }),
+// });
 
 app.listen(port, () => {
   //console.log(userMail, process.env.EMAILTO);
