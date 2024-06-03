@@ -254,6 +254,7 @@ app.get("/product", (req, res) => {
 //===================RestAPI ==================================
 
 const connectionbackend = require("./Model/connetionbackend");
+const { error } = require("console");
 connectionbackend.connect();
 
 // get
@@ -281,9 +282,9 @@ app.get("/backendu-users/:id", (req, res) => {
 });
 
 // ==================================================
-app.use(express.json()); // for parsing application/json
+// app.use(express.json()); // for parsing application/json
 //=============================================================
-
+//===========================================================================
 // Post
 app.post("/backendu-users/create-user", (req, res) => {
   const { username, email, password, ville } = req.body;
@@ -313,6 +314,54 @@ app.post("/backendu-users/create-user", (req, res) => {
 //     ville: "Marrrakech",
 //   }),
 // });
+//==================================================================================
+// Delete
+
+app.delete("/backendu-users/delete-user/:id", (req, res) => {
+  const id = req.params.id;
+  const query = "delete from user where id=?";
+  connectionbackend.query(query, [id], (err) => {
+    if (!err) {
+      res.status(201).json({ message: "User Delete" });
+    } else {
+      res.status(500).json({ message: "Error" });
+    }
+  });
+});
+//============================================================================
+// put
+app.put("/backendu-users/edit-user/:id", (req, res) => {
+  const id = req.params.id;
+  const { username, email, password, ville } = req.body;
+  const query =
+    "update user set username=? , email=? , password=? , ville=? where id=?";
+  connectionbackend.query(
+    query,
+    [username, email, password, ville, id],
+    (err) => {
+      if (!err) {
+        res.status(200).json({ message: "User info was updated sucessfully" });
+      } else {
+        res.status(500).json({ message: "Erro", error: err });
+      }
+    }
+  );
+});
+//====================================================================
+app.patch("/backendu-users/edit-user-username/:id", (req, res) => {
+  const id = req.params.id;
+  const { username } = req.body;
+  const query = "update user set username=? where id=?";
+  connectionbackend.query(query, [username, id], (err) => {
+    if (!err) {
+      res
+        .status(200)
+        .json({ message: `User name was updated sucessfully to ${username} ` });
+    } else {
+      res.status(500).json({ message: "Erro", error: err });
+    }
+  });
+});
 
 app.listen(port, () => {
   //console.log(userMail, process.env.EMAILTO);
