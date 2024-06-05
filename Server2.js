@@ -254,7 +254,7 @@ app.get("/product", (req, res) => {
 //===================RestAPI ==================================
 
 const connectionbackend = require("./Model/connetionbackend");
-const { error } = require("console");
+// const { error } = require("console");
 connectionbackend.connect();
 
 // get
@@ -348,6 +348,7 @@ app.put("/backendu-users/edit-user/:id", (req, res) => {
   );
 });
 //====================================================================
+// Patch
 app.patch("/backendu-users/edit-user-username/:id", (req, res) => {
   const id = req.params.id;
   const { username } = req.body;
