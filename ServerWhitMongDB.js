@@ -3,6 +3,8 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 
+const user = require("./Model/connection2");
+
 const port = process.env.PORT;
 
 app.listen(port, () => {
