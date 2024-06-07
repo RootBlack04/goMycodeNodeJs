@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 mongoose
   .connect("mongodb://127.0.0.1:27017/gomycodeBackend")
   .then((data) => {
-    console.log("satatu Ok");
+    console.log("Satatu : connection Successfully");
   })
   .catch((err) => {
-    console.log("satatu not Ok");
+    console.log("Satatu : connection Unsuccessfully");
   });
 
 const UserSchema = mongoose.Schema({
@@ -18,6 +18,7 @@ const UserSchema = mongoose.Schema({
   is_connected: {
     type: Boolean,
     require: true,
+    default: true,
   },
   city: {
     type: String,
@@ -25,26 +26,6 @@ const UserSchema = mongoose.Schema({
   },
 });
 
+const userM = mongoose.model("User", UserSchema);
 
-
-const user = mongoose.model("User", UserSchema);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-module.exports = user;
+module.exports = userM;
