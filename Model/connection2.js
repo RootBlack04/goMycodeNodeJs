@@ -6,7 +6,6 @@ dotenv.config({ path: "../.env" });
 
 const mongoDb = process.env.URLMONGODB;
 const port = process.env.PORT;
-console.log(port);
 
 // .connect("mongodb://127.0.0.1:27017/gomycodeBackend")
 mongoose
